@@ -15,7 +15,7 @@ public final class Screens {
                 new UI.Button(0, 0, 200, 20, "Air Start (1000 ft)", "airstart"),
                 new UI.Button(0, 0, 200, 20, "Options...", "options"),
                 new UI.Button(0, 0, 200, 20, "Controls...", "controls"),
-                new UI.Button(0, 0, 200, 20, "Quit Game", "quit"),
+                new UI.Button(0, 0, 200, 20, "Exit", "quit"),
         };
         private long time;
 
@@ -33,28 +33,65 @@ public final class Screens {
             float W = ui.uiW, H = ui.uiH;
             float cx = W / 2f;
             int bw = 200;
-            for (int i = 0; i < buttons.length; i++) {
+            int bh = 20;
+            int gap = 4;
+
+            // ===== main menu panel (all buttons except Exit), flush to left edge =====
+            int mainCount = buttons.length - 1;
+            float panelX = 0;
+            float panelY = H * 0.28f;
+            float panelW = bw + 16;
+            float panelH = 6 + Font.GLYPH_H + 4 + 6 + mainCount * (bh + gap) + 6;
+            ui.cyacPanel(panelX, panelY, panelW, panelH, "CHOOSE ACTIVITY");
+
+            for (int i = 0; i < mainCount; i++) {
                 UI.Button b = buttons[i];
-                b.x = 20;
-                b.y = H * 0.34f + i * 24;
-                b.render(ui);
-                if (b.hover && in.mousePressed(0)) return b.action;
+                b.x = panelX + 8;
+                b.y = panelY + 6 + Font.GLYPH_H + 4 + 6 + i * (bh + gap);
+                b.w = bw;
+                b.h = bh;
+                b.hover = b.contains(ui.mx, ui.my);
+                boolean bPressed = b.hover && in.mouseDown(0);
+                ui.cyacButton(b.x, b.y, b.w, b.h, b.label, b.hover, bPressed);
+                if (b.hover && in.mouseReleased(0)) return b.action;
             }
-            // logo — SKY in accent, TRAINER in white
+
+            // ===== exit button in its own smaller panel below, also flush left =====
+            UI.Button exit = buttons[buttons.length - 1];
+            float exitW = bw * 0.65f;
+            float exitPanelX = 0;
+            float exitPanelY = panelY + panelH + 4;
+            float exitPanelH = bh + 8;
+            ui.rect(exitPanelX - 1, exitPanelY - 1, exitW + 2, exitPanelH + 2, 0.10f, 0.10f, 0.12f, 1f);
+            ui.rect(exitPanelX, exitPanelY, exitW, exitPanelH, 0.78f, 0.78f, 0.80f, 1f);
+            ui.rect(exitPanelX, exitPanelY, exitW, 1, 0.92f, 0.92f, 0.94f, 1f);
+            ui.rect(exitPanelX, exitPanelY + exitPanelH - 1, exitW, 1, 0.52f, 0.52f, 0.56f, 1f);
+            exit.x = exitPanelX + 4;
+            exit.y = exitPanelY + 4;
+            exit.w = exitW - 8;
+            exit.h = bh;
+            exit.hover = exit.contains(ui.mx, ui.my);
+            boolean exitPressed = exit.hover && in.mouseDown(0);
+            ui.cyacButton(exit.x, exit.y, exit.w, exit.h, exit.label, exit.hover, exitPressed);
+            if (exit.hover && in.mouseReleased(0)) return exit.action;
+
+            // ===== logo =====
             float logoScl = 3;
-            String l1 = "SKY", l2 = "TRAINER";
+            String l1 = "AIR", l2 = "COMBAT";
             float y0 = H * 0.10f;
             float w1 = Font.width(l1, (int) logoScl);
-            ui.text(cx - (w1 + Font.width(l2, (int) logoScl)) / 2f, y0, l1, 1f, 0.78f, 0.2f, logoScl, true);
-            ui.text(cx - (w1 + Font.width(l2, (int) logoScl)) / 2f + w1, y0, l2, TITLE_COL[0], TITLE_COL[1], TITLE_COL[2], logoScl, true);
+            ui.text(cx - (w1 + Font.width(l2, (int) logoScl)) / 2f, y0, l1, Theme.TITLE_ACCENT_R, Theme.TITLE_ACCENT_G, Theme.TITLE_ACCENT_B, logoScl, true);
+            ui.text(cx - (w1 + Font.width(l2, (int) logoScl)) / 2f + w1, y0, l2, Theme.TITLE_WHITE_R, Theme.TITLE_WHITE_G, Theme.TITLE_WHITE_B, logoScl, true);
             ui.textCenter(cx, y0 + Font.GLYPH_H * logoScl + 4, "A procedural flight simulator", 0.85f, 0.88f, 0.92f, 1, true);
-            // splash
+
+            // ===== splash =====
             float pulse = 1f + (float) Math.sin(time * 0.14) * 0.05f;
             ui.textRotated(cx + 92, y0 + 14, splash, 1f, 1f, 0.25f, 1,
                     (float) Math.toRadians(-18), pulse);
             time++;
-            // footer
-            ui.text(4, H - 12, "SkyTrainer 0.1.0", 0.7f, 0.7f, 0.75f, 1, false);
+
+            // ===== footer =====
+            ui.text(4, H - 12, "Air Combat 0.1.0", 0.7f, 0.7f, 0.75f, 1, false);
             ui.textRight(W - 4, H - 12, "Procedural Aviation Demo", 0.7f, 0.7f, 0.75f, 1, false);
             return null;
         }

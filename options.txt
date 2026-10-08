@@ -1,0 +1,12 @@
+#SkyTrainer options
+#Thu Oct 08 16:42:41 CDT 2026
+clouds=true
+dayLength=12.000001
+fog=true
+fov=70.0
+invertY=false
+masterVolume=0.8
+music=true
+renderDistance=10
+sensitivity=1.0
+startClock=9.5

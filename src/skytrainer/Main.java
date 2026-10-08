@@ -101,7 +101,7 @@ public final class Main {
         GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
         GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
         GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
-        window = GLFW.glfwCreateWindow(winW, winH, "SkyTrainer 0.1.2", 0, 0);
+        window = GLFW.glfwCreateWindow(winW, winH, "Air Combat", 0, 0);
         if (window == 0) throw new IllegalStateException("Cannot create OpenGL 3.2 window");
         GLFW.glfwMakeContextCurrent(window);
         GL.createCapabilities();

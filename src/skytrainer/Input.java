@@ -11,6 +11,7 @@ public final class Input {
     public final Set<Integer> pressed = new HashSet<>();
     public final Set<Integer> mouseDown = new HashSet<>();
     public final Set<Integer> mousePressed = new HashSet<>();
+    public final Set<Integer> mouseReleased = new HashSet<>();
     public float mouseDX, mouseDY;   // accumulated since last frame (already scale-corrected)
     public float scroll;             // accumulated wheel steps since last frame
     public float mouseX, mouseY;     // window coords
@@ -21,6 +22,7 @@ public final class Input {
     public void endFrame() {
         pressed.clear();
         mousePressed.clear();
+        mouseReleased.clear();
         mouseDX = 0;
         mouseDY = 0;
         scroll = 0;
@@ -31,6 +33,8 @@ public final class Input {
     public boolean keyPressed(int k) { return pressed.contains(k); }
 
     public boolean mousePressed(int b) { return mousePressed.contains(b); }
+
+    public boolean mouseReleased(int b) { return mouseReleased.contains(b); }
 
     public boolean mouseDown(int b) { return mouseDown.contains(b); }
 
@@ -50,6 +54,7 @@ public final class Input {
             mousePressed.add(button);
         } else if (action == GLFW.GLFW_RELEASE) {
             mouseDown.remove(button);
+            mouseReleased.add(button);
         }
     }
 

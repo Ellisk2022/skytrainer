@@ -231,6 +231,70 @@ public final class UI {
         rect(0, 0, uiW, uiH, 0, 0, 0, 0.35f);
     }
 
+    /** CYAC-style framed menu panel using Theme colors. Dark outer frame, light inset line, gray fill, underlined header. */
+    public void cyacPanel(float x, float y, float w, float h, String header) {
+        int o = Theme.OUTER_FRAME_PX;
+        int i = Theme.INSET_FRAME_PX;
+        rect(x - o - i, y - o - i, w + 2*(o+i), h + 2*(o+i),
+                Theme.PANEL_OUTER_R, Theme.PANEL_OUTER_G, Theme.PANEL_OUTER_B, 1f);
+        rect(x - i, y - i, w + 2*i, h + 2*i,
+                Theme.PANEL_INSET_R, Theme.PANEL_INSET_G, Theme.PANEL_INSET_B, 1f);
+        rect(x, y, w, h,
+                Theme.PANEL_FILL_R, Theme.PANEL_FILL_G, Theme.PANEL_FILL_B, 1f);
+        float htx = x + w / 2f;
+        float hty = y + 6;
+        textCenter(htx, hty, header, Theme.TEXT_DARK_R, Theme.TEXT_DARK_G, Theme.TEXT_DARK_B, 1, true);
+        float hw = Font.width(sanitize(header), 1);
+        rect(htx - hw / 2f, hty + Font.GLYPH_H + 2, hw, 1,
+                Theme.TEXT_DARK_R, Theme.TEXT_DARK_G, Theme.TEXT_DARK_B, 1f);
+    }
+
+    /** CYAC-style button: 1px dark outline, beveled fill with inverted bevels on hover/press,
+     *  and ►/◄ arrow markers on the sides when hovered. */
+    public void cyacButton(float x, float y, float w, float h, String label, boolean hover, boolean pressed) {
+        int b = Theme.BEVEL_PX;
+        float fr, fg, fb, tr, tg, tb;
+        if (pressed) {
+            fr = Theme.BTN_PRESS_FILL_R; fg = Theme.BTN_PRESS_FILL_G; fb = Theme.BTN_PRESS_FILL_B;
+            tr = Theme.BTN_PRESS_TEXT_R; tg = Theme.BTN_PRESS_TEXT_G; tb = Theme.BTN_PRESS_TEXT_B;
+        } else if (hover) {
+            fr = Theme.BTN_HOVER_FILL_R; fg = Theme.BTN_HOVER_FILL_G; fb = Theme.BTN_HOVER_FILL_B;
+            tr = Theme.BTN_HOVER_TEXT_R; tg = Theme.BTN_HOVER_TEXT_G; tb = Theme.BTN_HOVER_TEXT_B;
+        } else {
+            fr = Theme.BTN_FILL_R; fg = Theme.BTN_FILL_G; fb = Theme.BTN_FILL_B;
+            tr = Theme.BTN_TEXT_R; tg = Theme.BTN_TEXT_G; tb = Theme.BTN_TEXT_B;
+        }
+        if (hover || pressed) {
+            rect(x - 1, y - 1, w + 2, h + 2, 0.10f, 0.10f, 0.12f, 1f);
+        }
+        rect(x, y, w, h, fr, fg, fb, 1f);
+        float hlR, hlG, hlB, shR, shG, shB;
+        if (hover || pressed) {
+            // inverted bevels = sunken look
+            hlR = Theme.BTN_SHADOW_R; hlG = Theme.BTN_SHADOW_G; hlB = Theme.BTN_SHADOW_B;
+            shR = Theme.BTN_HILITE_R; shG = Theme.BTN_HILITE_G; shB = Theme.BTN_HILITE_B;
+        } else {
+            hlR = Theme.BTN_HILITE_R; hlG = Theme.BTN_HILITE_G; hlB = Theme.BTN_HILITE_B;
+            shR = Theme.BTN_SHADOW_R; shG = Theme.BTN_SHADOW_G; shB = Theme.BTN_SHADOW_B;
+        }
+        rect(x, y, w, b, hlR, hlG, hlB, 1f);
+        rect(x, y + b, b, h - 2*b, hlR, hlG, hlB, 1f);
+        rect(x, y + h - b, w, b, shR, shG, shB, 1f);
+        rect(x + w - b, y + b, b, h - 2*b, shR, shG, shB, 1f);
+        float tx = x + w / 2f;
+        float ty = y + (h - Font.GLYPH_H) / 2f + 1;
+        if (pressed) { tx += 1; ty += 1; }
+        textCenter(tx, ty, label, tr, tg, tb, 1, false);
+        if (hover) {
+            float labelW = Font.width(sanitize(label), 1);
+            float arrowY = y + (h - Font.GLYPH_H) / 2f + 1;
+            float leftX = x + 6;
+            float rightX = x + w - 6 - Font.ADVANCE;
+            text(leftX, arrowY, ">", tr, tg, tb, 1, false);
+            text(rightX, arrowY, "<", tr, tg, tb, 1, false);
+        }
+    }
+
     /** Riveted instrument-panel strip along the bottom (cockpit view). */
     public void cockpitPanel(float height) {
         float[] uv = RIVET_UV;
