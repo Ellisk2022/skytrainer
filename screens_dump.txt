@@ -1,4 +1,4 @@
-package skytrainer;
+﻿package skytrainer;
 
 import java.util.Random;
 
@@ -34,60 +34,16 @@ public final class Screens {
             float cx = W / 2f;
             int bw = 200;
             int bh = 20;
-            int gap = 2;
-            int mainCount = buttons.length;
+            int gap = 4;
 
+            // ===== main menu panel (all buttons except Exit), flush to left edge =====
+            int mainCount = buttons.length;
             float panelX = 0;
             float panelY = H * 0.28f;
             float panelW = bw + 16;
             float panelH = 6 + Font.GLYPH_H + 4 + 6 + mainCount * (bh + gap) + 6;
+            ui.cyacPanel(panelX, panelY, panelW, panelH, "CHOOSE ACTIVITY");
 
-            // ===== inset recessed slot variables =====
-            float panelAX = panelX + 4;
-            float panelAY = panelY + 6 + Font.GLYPH_H + 6;
-            float panelAW = panelW - 8;
-            float panelAH = (panelY + panelH) - panelAY;
-
-            // ===== bottom row geometry =====
-            float btnH = 18f;
-            float rowGap = 6f;
-            float innerPad = 5f;
-            float bottomH = btnH + innerPad * 2;
-            float dividerGap = 6f;
-            float bottomY = panelAY + panelAH + 6;
-            float totalH = (bottomY + bottomH) - panelY;
-
-            // ===== ONE unified frame around the whole menu =====
-            // gold outer band
-            ui.rect(panelX - 6, panelY - 6, panelW + 12, totalH + 12, 0.60f, 0.48f, 0.10f, 1f);
-            // dark frame
-            ui.rect(panelX - 4, panelY - 4, panelW + 8, totalH + 8, 0.05f, 0.05f, 0.06f, 1f);
-            // light inset
-            ui.rect(panelX - 2, panelY - 2, panelW + 4, totalH + 4, 0.95f, 0.95f, 0.97f, 1f);
-            // unified panel fill (covers both sections)
-            ui.rect(panelX, panelY, panelW, totalH, 0.72f, 0.72f, 0.74f, 1f);
-            // outer panel raised bevel - light top/left, dark bottom/right
-            ui.rect(panelX, panelY, panelW, 2, 0.90f, 0.90f, 0.92f, 1f);
-            ui.rect(panelX, panelY + 2, 2, totalH - 4, 0.90f, 0.90f, 0.92f, 1f);
-            ui.rect(panelX, panelY + totalH - 2, panelW, 2, 0.42f, 0.42f, 0.46f, 1f);
-            ui.rect(panelX + panelW - 2, panelY + 2, 2, totalH - 4, 0.42f, 0.42f, 0.46f, 1f);
-
-            // ===== inset recessed slot for the main buttons =====
-            ui.rect(panelAX, panelAY, panelAW, panelAH, 0.63f, 0.63f, 0.66f, 1f);
-            // recessed bevel - stronger, 2px dark top/left, bright bottom/right
-            ui.rect(panelAX, panelAY, panelAW, 2, 0.30f, 0.30f, 0.34f, 1f);
-            ui.rect(panelAX, panelAY + 2, 2, panelAH - 4, 0.30f, 0.30f, 0.34f, 1f);
-            ui.rect(panelAX, panelAY + panelAH - 2, panelAW, 2, 0.98f, 0.98f, 1.00f, 1f);
-            ui.rect(panelAX + panelAW - 2, panelAY + 2, 2, panelAH - 4, 0.98f, 0.98f, 1.00f, 1f);
-
-            // ===== header "CHOOSE ACTIVITY" in the main section =====
-            float htx = panelX + panelW / 2f;
-            float hty = panelY + 8;
-            ui.textCenter(htx, hty, "CHOOSE ACTIVITY", 0.06f, 0.26f, 0.24f, 1, true);
-            float hw = Font.width(UI.sanitize("CHOOSE ACTIVITY"), 1);
-            ui.rect(htx - hw / 2f, hty + Font.GLYPH_H + 2, hw, 1, 0.06f, 0.26f, 0.24f, 1f);
-
-            // ===== main buttons =====
             for (int i = 0; i < mainCount; i++) {
                 UI.Button b = buttons[i];
                 b.x = panelX + 8;
@@ -100,22 +56,49 @@ public final class Screens {
                 if (b.hover && in.mouseReleased(0)) return b.action;
             }
 
-            // ===== thin divider between main section and bottom section =====
-            ui.rect(panelX + 4, panelY + panelH + dividerGap / 2f, panelW - 8, 1, 0.42f, 0.42f, 0.46f, 1f);
-
             // ===== bottom row: Exit to DOS and Credits =====
-            float btnW = (panelW - innerPad * 2 - rowGap) / 2f;
-            UI.Button exitBtn = new UI.Button(panelX + innerPad, bottomY + innerPad, btnW, btnH, "Exit to DOS", "quit");
-            UI.Button creditsBtn = new UI.Button(panelX + innerPad + btnW + rowGap, bottomY + innerPad, btnW, btnH, "Credits", "credits");
+            UI.Button exitBtn = new UI.Button(0, 0, 115, 18, "Exit to DOS", "quit");
+            UI.Button creditsBtn = new UI.Button(0, 0, 115, 18, "Credits", "credits");
+            float bottomW = panelW;
+            float btnH = 18f;
+            float rowGap = 6f;
+            float innerPad = 6f;
+            float btnW = (bottomW - innerPad * 2 - rowGap) / 2f;
+            float bottomX = 0;
+            float bottomY = panelY + panelH + 4;
+            float bottomH = btnH + innerPad * 2;
+            // gold outer band
+            ui.rect(bottomX - 6, bottomY - 6, bottomW + 12, bottomH + 12, 0.60f, 0.48f, 0.10f, 1f);
+            // dark frame
+            ui.rect(bottomX - 4, bottomY - 4, bottomW + 8, bottomH + 8, 0.05f, 0.05f, 0.06f, 1f);
+            // light inset
+            ui.rect(bottomX - 2, bottomY - 2, bottomW + 4, bottomH + 4, 0.95f, 0.95f, 0.97f, 1f);
+            // panel fill
+            ui.rect(bottomX, bottomY, bottomW, bottomH, 0.72f, 0.72f, 0.74f, 1f);
+            // top/left bevel
+            ui.rect(bottomX, bottomY, bottomW, 2, 0.90f, 0.90f, 0.92f, 1f);
+            ui.rect(bottomX, bottomY + 2, 2, bottomH - 4, 0.90f, 0.90f, 0.92f, 1f);
+            // bottom/right bevel
+            ui.rect(bottomX, bottomY + bottomH - 2, bottomW, 2, 0.42f, 0.42f, 0.46f, 1f);
+            ui.rect(bottomX + bottomW - 2, bottomY + 2, 2, bottomH - 4, 0.42f, 0.42f, 0.46f, 1f);
 
+            exitBtn.x = bottomX + innerPad;
+            exitBtn.y = bottomY + innerPad;
+            exitBtn.w = btnW;
+            exitBtn.h = btnH;
             exitBtn.hover = exitBtn.contains(ui.mx, ui.my);
             boolean exitPressed = exitBtn.hover && in.mouseDown(0);
             ui.drawFlatButton(exitBtn.x, exitBtn.y, exitBtn.w, exitBtn.h, exitBtn.label, exitBtn.hover, exitPressed);
             if (exitBtn.hover && in.mouseReleased(0)) return exitBtn.action;
 
+            creditsBtn.x = bottomX + innerPad + btnW + rowGap;
+            creditsBtn.y = bottomY + innerPad;
+            creditsBtn.w = btnW;
+            creditsBtn.h = btnH;
             creditsBtn.hover = creditsBtn.contains(ui.mx, ui.my);
             boolean creditsPressed = creditsBtn.hover && in.mouseDown(0);
             ui.drawFlatButton(creditsBtn.x, creditsBtn.y, creditsBtn.w, creditsBtn.h, creditsBtn.label, creditsBtn.hover, creditsPressed);
+            // Credits is a stub - ignore clicks
 
             // ===== logo =====
             float logoScl = 3;
@@ -223,7 +206,7 @@ public final class Screens {
                 {"Mouse", "Pitch (stick) and roll (yoke)"},
                 {"Mouse down", "Pull nose up (stick style)"},
                 {"W / S", "Throttle up / down"},
-                {"A / D", "Rudder — ground steering"},
+                {"A / D", "Rudder â€” ground steering"},
                 {"Arrow keys", "Elevator / ailerons (backup)"},
                 {"B or Space", "Wheel brakes"},
                 {"C or F5", "Toggle chase / cockpit view"},

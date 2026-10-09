@@ -231,31 +231,66 @@ public final class UI {
         rect(0, 0, uiW, uiH, 0, 0, 0, 0.35f);
     }
 
-    /** CYAC-style framed menu panel using Theme colors. Dark outer frame, light inset line, gray fill, underlined header. */
     public void cyacPanel(float x, float y, float w, float h, String header) {
-        int o = Theme.OUTER_FRAME_PX;
-        int i = Theme.INSET_FRAME_PX;
-        rect(x - o - i, y - o - i, w + 2*(o+i), h + 2*(o+i),
-                Theme.PANEL_OUTER_R, Theme.PANEL_OUTER_G, Theme.PANEL_OUTER_B, 1f);
-        rect(x - i, y - i, w + 2*i, h + 2*i,
-                Theme.PANEL_INSET_R, Theme.PANEL_INSET_G, Theme.PANEL_INSET_B, 1f);
-        rect(x, y, w, h,
-                Theme.PANEL_FILL_R, Theme.PANEL_FILL_G, Theme.PANEL_FILL_B, 1f);
+        // gold outer band (2px)
+        rect(x - 6, y - 6, w + 12, h + 12, 0.60f, 0.48f, 0.10f, 1f);
+        // dark middle frame
+        rect(x - 4, y - 4, w + 8, h + 8, 0.05f, 0.05f, 0.06f, 1f);
+        // light inset border
+        rect(x - 2, y - 2, w + 4, h + 4, 0.95f, 0.95f, 0.97f, 1f);
+        // panel fill
+        rect(x, y, w, h, 0.72f, 0.72f, 0.74f, 1f);
+        // 2px light bevel on top and left of the panel fill
+        rect(x, y, w, 2, 0.90f, 0.90f, 0.92f, 1f);
+        rect(x, y + 2, 2, h - 4, 0.90f, 0.90f, 0.92f, 1f);
+        // 2px dark bevel on bottom and right of the panel fill
+        rect(x, y + h - 2, w, 2, 0.42f, 0.42f, 0.46f, 1f);
+        rect(x + w - 2, y + 2, 2, h - 4, 0.42f, 0.42f, 0.46f, 1f);
+        // header text in teal, underlined
         float htx = x + w / 2f;
-        float hty = y + 6;
-        textCenter(htx, hty, header, Theme.TEXT_DARK_R, Theme.TEXT_DARK_G, Theme.TEXT_DARK_B, 1, true);
+        float hty = y + 8;
+        textCenter(htx, hty, header, 0.06f, 0.26f, 0.24f, 1, true);
         float hw = Font.width(sanitize(header), 1);
-        rect(htx - hw / 2f, hty + Font.GLYPH_H + 2, hw, 1,
-                Theme.TEXT_DARK_R, Theme.TEXT_DARK_G, Theme.TEXT_DARK_B, 1f);
+        rect(htx - hw / 2f, hty + Font.GLYPH_H + 2, hw, 1, 0.06f, 0.26f, 0.24f, 1f);
     }
 
-    /** CYAC-style button: 1px dark outline, beveled fill with inverted bevels on hover/press,
-     *  and ►/◄ arrow markers on the sides when hovered. */
-    public void cyacButton(float x, float y, float w, float h, String label, boolean hover, boolean pressed) {
-        int b = Theme.BEVEL_PX;
+    /** Flat button for use inside a shared panel - light bevel only, no outer frame. */
+    public void drawFlatButton(float x, float y, float w, float h, String label, boolean hover, boolean pressed) {
         float fr, fg, fb, tr, tg, tb;
         if (pressed) {
-            fr = Theme.BTN_PRESS_FILL_R; fg = Theme.BTN_PRESS_FILL_G; fb = Theme.BTN_PRESS_FILL_B;
+            fr = 0.55f; fg = 0.55f; fb = 0.58f;
+            tr = 0.06f; tg = 0.26f; tb = 0.24f;
+        } else if (hover) {
+            fr = Theme.BTN_HOVER_FILL_R; fg = Theme.BTN_HOVER_FILL_G; fb = Theme.BTN_HOVER_FILL_B;
+            tr = Theme.BTN_HOVER_TEXT_R; tg = Theme.BTN_HOVER_TEXT_G; tb = Theme.BTN_HOVER_TEXT_B;
+        } else {
+            fr = Theme.BTN_FILL_R; fg = Theme.BTN_FILL_G; fb = Theme.BTN_FILL_B;
+            tr = Theme.BTN_TEXT_R; tg = Theme.BTN_TEXT_G; tb = Theme.BTN_TEXT_B;
+        }
+        rect(x, y, w, h, fr, fg, fb, 1f);
+        // 1px light highlight top + left
+        float hlR = 0.98f, hlG = 0.98f, hlB = 1.00f;
+        float shR = 0.20f, shG = 0.20f, shB = 0.24f;
+        if (hover || pressed) {
+            float tmpR = hlR, tmpG = hlG, tmpB = hlB;
+            hlR = shR; hlG = shG; hlB = shB;
+            shR = tmpR; shG = tmpG; shB = tmpB;
+        }
+        rect(x, y, w, 1, hlR, hlG, hlB, 1f);
+        rect(x, y + 1, 1, h - 2, hlR, hlG, hlB, 1f);
+        rect(x, y + h - 1, w, 1, shR, shG, shB, 1f);
+        rect(x + w - 1, y + 1, 1, h - 2, shR, shG, shB, 1f);
+        // label
+        float tx = x + w / 2f;
+        float ty = y + (h - Font.GLYPH_H) / 2f + 1;
+        if (pressed) { tx += 1; ty += 1; }
+        textCenter(tx, ty, label, tr, tg, tb, 1, false);
+    }
+
+    public void cyacButton(float x, float y, float w, float h, String label, boolean hover, boolean pressed) {
+        float fr, fg, fb, tr, tg, tb;
+        if (pressed) {
+            fr = 0.55f; fg = 0.55f; fb = 0.58f;
             tr = Theme.BTN_PRESS_TEXT_R; tg = Theme.BTN_PRESS_TEXT_G; tb = Theme.BTN_PRESS_TEXT_B;
         } else if (hover) {
             fr = Theme.BTN_HOVER_FILL_R; fg = Theme.BTN_HOVER_FILL_G; fb = Theme.BTN_HOVER_FILL_B;
@@ -264,32 +299,35 @@ public final class UI {
             fr = Theme.BTN_FILL_R; fg = Theme.BTN_FILL_G; fb = Theme.BTN_FILL_B;
             tr = Theme.BTN_TEXT_R; tg = Theme.BTN_TEXT_G; tb = Theme.BTN_TEXT_B;
         }
-        if (hover || pressed) {
-            rect(x - 1, y - 1, w + 2, h + 2, 0.10f, 0.10f, 0.12f, 1f);
-        }
+        // 1px dark outline around the button
+        rect(x - 1, y - 1, w + 2, h + 2, 0.10f, 0.10f, 0.12f, 1f);
+        // fill
         rect(x, y, w, h, fr, fg, fb, 1f);
-        float hlR, hlG, hlB, shR, shG, shB;
+        // 2px bright highlight top + left
+        float hlR = 0.98f, hlG = 0.98f, hlB = 1.00f;
+        float shR = 0.15f, shG = 0.15f, shB = 0.18f;
         if (hover || pressed) {
-            // inverted bevels = sunken look
-            hlR = Theme.BTN_SHADOW_R; hlG = Theme.BTN_SHADOW_G; hlB = Theme.BTN_SHADOW_B;
-            shR = Theme.BTN_HILITE_R; shG = Theme.BTN_HILITE_G; shB = Theme.BTN_HILITE_B;
-        } else {
-            hlR = Theme.BTN_HILITE_R; hlG = Theme.BTN_HILITE_G; hlB = Theme.BTN_HILITE_B;
-            shR = Theme.BTN_SHADOW_R; shG = Theme.BTN_SHADOW_G; shB = Theme.BTN_SHADOW_B;
+            float tmpR = hlR, tmpG = hlG, tmpB = hlB;
+            hlR = shR; hlG = shG; hlB = shB;
+            shR = tmpR; shG = tmpG; shB = tmpB;
         }
-        rect(x, y, w, b, hlR, hlG, hlB, 1f);
-        rect(x, y + b, b, h - 2*b, hlR, hlG, hlB, 1f);
-        rect(x, y + h - b, w, b, shR, shG, shB, 1f);
-        rect(x + w - b, y + b, b, h - 2*b, shR, shG, shB, 1f);
+        rect(x, y, w, 2, hlR, hlG, hlB, 1f);
+        rect(x, y + 2, 2, h - 4, hlR, hlG, hlB, 1f);
+        rect(x, y + h - 2, w, 2, shR, shG, shB, 1f);
+        rect(x + w - 2, y + 2, 2, h - 4, shR, shG, shB, 1f);
+
+        // label
         float tx = x + w / 2f;
         float ty = y + (h - Font.GLYPH_H) / 2f + 1;
         if (pressed) { tx += 1; ty += 1; }
         textCenter(tx, ty, label, tr, tg, tb, 1, false);
+
+        // arrows when hovered - bigger, sharper triangles
         if (hover) {
             float cy = y + h / 2f;
-            float size = 4f;
-            float leftX = x + 8f;
-            float rightX = x + w - 8f;
+            float size = 5f;
+            float leftX = x + 10f;
+            float rightX = x + w - 10f;
             drawTriangleRight(leftX, cy, size, tr, tg, tb);
             drawTriangleLeft(rightX, cy, size, tr, tg, tb);
         }
@@ -301,7 +339,7 @@ public final class UI {
         atlas.bind(0);
         batch.begin();
         float h = size;
-        float w = size * 0.9f;
+        float w = size * 1.4f;
         float[] px = {tipX, tipX - w, tipX - w, tipX};
         float[] py = {cy, cy - h, cy + h, cy};
         float[] ux = {WHITE_UV[0], WHITE_UV[2], WHITE_UV[2], WHITE_UV[0]};
@@ -316,7 +354,7 @@ public final class UI {
         atlas.bind(0);
         batch.begin();
         float h = size;
-        float w = size * 0.9f;
+        float w = size * 1.4f;
         float[] px = {tipX, tipX + w, tipX + w, tipX};
         float[] py = {cy, cy - h, cy + h, cy};
         float[] ux = {WHITE_UV[0], WHITE_UV[2], WHITE_UV[2], WHITE_UV[0]};
