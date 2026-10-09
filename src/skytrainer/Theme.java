@@ -13,15 +13,15 @@ public final class Theme {
     public static float BTN_FILL_R    = 0.78f, BTN_FILL_G    = 0.78f, BTN_FILL_B    = 0.80f;
     public static float BTN_HILITE_R  = 1.00f, BTN_HILITE_G  = 1.00f, BTN_HILITE_B  = 1.00f;
     public static float BTN_SHADOW_R  = 0.10f, BTN_SHADOW_G  = 0.10f, BTN_SHADOW_B  = 0.12f;
-    public static float BTN_TEXT_R    = 0.10f, BTN_TEXT_G    = 0.10f, BTN_TEXT_B    = 0.12f;
+    public static float BTN_TEXT_R    = 0.10f, BTN_TEXT_G    = 0.32f, BTN_TEXT_B    = 0.12f;
 
     // ---------- Button hovered (selected) ----------
     public static float BTN_HOVER_FILL_R = 0.55f, BTN_HOVER_FILL_G = 0.55f, BTN_HOVER_FILL_B = 0.58f;
-    public static float BTN_HOVER_TEXT_R = 0.98f, BTN_HOVER_TEXT_G = 0.98f, BTN_HOVER_TEXT_B = 1.00f;
+    public static float BTN_HOVER_TEXT_R = 0.15f, BTN_HOVER_TEXT_G = 0.85f, BTN_HOVER_TEXT_B = 0.20f;
 
     // ---------- Button pressed (depressed) ----------
     public static float BTN_PRESS_FILL_R = 0.65f, BTN_PRESS_FILL_G = 0.65f, BTN_PRESS_FILL_B = 0.67f;
-    public static float BTN_PRESS_TEXT_R = 0.08f, BTN_PRESS_TEXT_G = 0.08f, BTN_PRESS_TEXT_B = 0.10f;
+    public static float BTN_PRESS_TEXT_R = 0.10f, BTN_PRESS_TEXT_G = 0.32f, BTN_PRESS_TEXT_B = 0.12f;
 
     // ---------- Text ----------
     public static float TEXT_DARK_R  = 0.10f, TEXT_DARK_G  = 0.10f, TEXT_DARK_B  = 0.12f;

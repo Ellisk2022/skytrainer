@@ -286,13 +286,43 @@ public final class UI {
         if (pressed) { tx += 1; ty += 1; }
         textCenter(tx, ty, label, tr, tg, tb, 1, false);
         if (hover) {
-            float labelW = Font.width(sanitize(label), 1);
-            float arrowY = y + (h - Font.GLYPH_H) / 2f + 1;
-            float leftX = x + 6;
-            float rightX = x + w - 6 - Font.ADVANCE;
-            text(leftX, arrowY, ">", tr, tg, tb, 1, false);
-            text(rightX, arrowY, "<", tr, tg, tb, 1, false);
+            float cy = y + h / 2f;
+            float size = 4f;
+            float leftX = x + 8f;
+            float rightX = x + w - 8f;
+            drawTriangleRight(leftX, cy, size, tr, tg, tb);
+            drawTriangleLeft(rightX, cy, size, tr, tg, tb);
         }
+    }
+
+    /** Filled right-pointing triangle for the selected-item marker. */
+    public void drawTriangleRight(float tipX, float cy, float size, float r, float g, float b) {
+        tint(r, g, b, 1);
+        atlas.bind(0);
+        batch.begin();
+        float h = size;
+        float w = size * 0.9f;
+        float[] px = {tipX, tipX - w, tipX - w, tipX};
+        float[] py = {cy, cy - h, cy + h, cy};
+        float[] ux = {WHITE_UV[0], WHITE_UV[2], WHITE_UV[2], WHITE_UV[0]};
+        float[] vy = {WHITE_UV[1], WHITE_UV[3], WHITE_UV[1], WHITE_UV[1]};
+        batch.poly(px, py, ux, vy, 0, 1, 1, 1);
+        batch.draw();
+    }
+
+    /** Filled left-pointing triangle for the selected-item marker. */
+    public void drawTriangleLeft(float tipX, float cy, float size, float r, float g, float b) {
+        tint(r, g, b, 1);
+        atlas.bind(0);
+        batch.begin();
+        float h = size;
+        float w = size * 0.9f;
+        float[] px = {tipX, tipX + w, tipX + w, tipX};
+        float[] py = {cy, cy - h, cy + h, cy};
+        float[] ux = {WHITE_UV[0], WHITE_UV[2], WHITE_UV[2], WHITE_UV[0]};
+        float[] vy = {WHITE_UV[1], WHITE_UV[3], WHITE_UV[1], WHITE_UV[1]};
+        batch.poly(px, py, ux, vy, 0, 1, 1, 1);
+        batch.draw();
     }
 
     /** Riveted instrument-panel strip along the bottom (cockpit view). */
